@@ -6,20 +6,31 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'mvn clean install'
-            }
+                echo "build started"
+                sh 'mvn clean deploy -Dmaven.test.skip=true'
+                echo "build completed"
+            } 
         }
-        stage('SonarQube analysis') {
+        stage ("test") {
+           steps {
+               echo "unit test started"
+               sh 'mvn surefire-report:report'
+               echo "unit test completed"
+           } 
+        }   
+        stage("SonarQube analysis") {
             environment {
-                scannerHome = tool 'sonarqube-scanner-install'
+                scannerHome = tool 'saidemy-sonar-scanner'
             }
             steps {
-                withSonarQubeEnv('navya-sonarqube-server') {
+                withSonarQubeEnv('saidemy-sonarqube-server') {
+
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
-        }	
-    }
+        }
+        
+    }    
 }
 
 
