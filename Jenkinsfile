@@ -20,10 +20,10 @@ pipeline {
         }   
         stage("SonarQube analysis") {
             environment {
-                scannerHome = tool 'saidemy-sonar-scanner'
+                scannerHome = tool 'sonarqube-scanner-install'
             }
             steps {
-                withSonarQubeEnv('saidemy-sonarqube-server') {
+                withSonarQubeEnv('navya-sonarqube-server') {
 
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
